@@ -44,7 +44,7 @@ reset_terminal() {
     # '\e[;r':    Set the scroll region to its default value.
     #             Also sets cursor to (0,0).
     # '\e[?1049l: Restore main screen buffer.
-    printf '\e[?7h\e[?25h\e[2J\e[;r\e[?1049l'
+    printf '\e[?7h\e[?25l\e[2J\e[;r\e[?1049l'
 
     # Show user input.
     stty echo
@@ -77,7 +77,7 @@ status_line()
            "0" \
            "4" \
            "$COLUMNS" "" \
-           "($((scroll+1))/$((list_totals+1)))" \
+           "($((scroll+1))/$((list_totals)))" \
            "<Enter> Select | j-k: Up and Down | g-G: Goto Top-Bottom | " \
            "q: Quit"  \
 	   "$LINES" 
@@ -103,16 +103,18 @@ fi
 print_items(){
 local i=0
 [[ $1 == last ]] && {
+local k=list_totals;
 printf '\e[H'
-for ((i=list_totals-max_items-1;i<list_totals;i++)); {
+for ((i=list_totals-max_items;i<k;i++)); {
 	print_line "$i"
-	printf '\n'
+	(($i<$k-1)) && printf '\n'
 } 
 }
 [[ $1 != last ]] && {
-for ((i=scroll;i<max_items-1+scroll;i++)); {
+local k=max_items+scroll;
+for ((i=scroll;i<k;i++)); {
 	print_line "$i"
-	printf '\n'
+	(($i<k-1)) && printf '\n'
 } 
 printf '\e[H'
 }
@@ -180,7 +182,7 @@ key() {
 	;;
 	G) #Goto Bottom
 		((scroll != list_totals )) && {
-		((scroll=list_totals))
+		((scroll=list_totals-1))
 		((y=max_items))
 		print_items last
 		status_line
@@ -258,7 +260,6 @@ get_term_size
 clear_screen
 print_items
 status_line
-printf '\e[H'
     trap 'reset_terminal' EXIT
     # Vintage infinite loop.
     for ((;;)); {
