@@ -1,0 +1,47 @@
+.TH BSMENU "1" "May 2021" "bsmenu" "User Commands"
+.SH NAME
+bsmenu \- : A bash menu selector
+.SH SYNOPSIS
+.B bsmenu
+[\fI\,OPTION\/\fR]... [\fI\,FILE\/\fR]...
+.SH DESCRIPTION
+A simple menu selector.
+prints selection to standard out.
+Inspired by suckless dmenu and slmenu
+.PP
+With no FILE, read standard input
+.PP
+The options below may be used:
+.TP
+\fB\-d\fR\fI\ DELIM\/\fR
+USE DELIM instead of NEWLINE for field delimiter: USE "\\t" for TAB "\\s" for SPACE
+.TP
+\fB\-h\fR,
+print usage
+
+.SH "USAGE"
+.
+.nf
+
+j: scroll down
+k: scroll up
+q: Quit
+
+enter: select and quit
+
+g: go to top
+G: go to bottom
+
+Arrow Keys
+down:  scroll down
+up:    scroll up
+.
+.fi
+.
+.SH AUTHOR
+Written by Stockman W.
+.SH "REPORTING BUGS"
+On Github: <https://github.com/wimstockman/bsmenu/>
+.br
+.SH COPYRIGHT
+ License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.

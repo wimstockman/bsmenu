@@ -88,9 +88,10 @@ IFS=$'\n'
 while read line
 do 
 list+=("$line")
+[[ -z $line ]] && break
 done <"${1:-/proc/self/fd/0}"    # replaced /dev/stdin so it is also compatible with Termux
-
-if [ "$delim" != "" ] # if delimiter specified split lines on delimiter
+[[ -n $line ]] && list+=("$line")
+if [ ! -z "$delim" ] # if delimiter specified split lines on delimiter
 then
 {
 IFS="$delim" read -a myarray <<< ${list[@]}
@@ -210,6 +211,9 @@ setdelim() {
 	case $1 in
 	\\t)  
 	delim=$'\t'
+	;;
+	\\s)
+	delim=" "
 	;;
 	?) 
 	delim=$1
